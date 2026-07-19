@@ -250,6 +250,7 @@
   .b-appr{background:color-mix(in srgb,var(--ok) 16%,var(--surface));color:var(--ok)}
   .b-count{background:var(--surface-2);color:var(--muted)}
   .b-compartido{background:color-mix(in srgb,var(--muted) 20%,var(--surface));color:var(--ink-soft)}
+  .b-dc{background:color-mix(in srgb,var(--accent) 18%,var(--surface));color:var(--accent)}
   .fcard .fbody{padding:0 18px;max-height:0;overflow:hidden;transition:max-height .3s ease;color:var(--ink-soft);font-size:.93rem}
   .fcard.open .fbody{max-height:1400px;padding-bottom:8px}
   .fbody h5{margin:14px 0 4px;color:var(--brand);font-size:.82rem;text-transform:uppercase;letter-spacing:.05em}
@@ -611,6 +612,7 @@
       <button class="chip-filter active" data-f="todos">Todos</button>
       <button class="chip-filter" data-f="DP-ES">🔵 DP-ES</button>
       <button class="chip-filter" data-f="WM-ES">🟠 WM-ES</button>
+      <button class="chip-filter" data-f="Duracreto">🟢 Duracreto</button>
       <button class="chip-filter" data-f="Mixto">🟣 Mixto HN/ES</button>
       <button class="chip-filter" data-f="Compartido">⚪ Compartidos</button>
     </div>
@@ -652,9 +654,12 @@
       </div>
       <div class="card pad">
         <h3 style="color:var(--brand)">📇 Contacto de soporte</h3>
-        <p style="color:var(--ink-soft)">Escríbenos por <b>WhatsApp</b>: es la vía más rápida para resolver tu duda.</p>
-        <a class="btn wa-btn" href="https://wa.me/50488901615" target="_blank" rel="noopener">💬 WhatsApp &nbsp;·&nbsp; +504 8890-1615</a>
-        <div class="callout tip" style="margin-top:14px"><span class="ci">💡</span><div>Cuando escribas, incluye: tu <b>nombre</b>, tu <b>correo de empresa</b>, el <b>formulario</b> y una <b>captura</b> del problema. Así te ayudan más rápido.</div></div>
+        <p style="color:var(--ink-soft)">Tienes <b>dos formas</b> de pedir ayuda:</p>
+        <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:4px">
+          <a class="btn wa-btn" href="https://wa.me/50488901615" target="_blank" rel="noopener">💬 WhatsApp &nbsp;·&nbsp; +504 8890-1615</a>
+          <a class="btn btn-primary" href="https://tinyurl.com/Soporte-Platino" target="_blank" rel="noopener">🖥️ Plataforma de soporte</a>
+        </div>
+        <div class="callout tip" style="margin-top:14px"><span class="ci">💡</span><div>Cuando escribas (por WhatsApp o en la plataforma), incluye: tu <b>nombre</b>, tu <b>correo de empresa</b>, el <b>formulario</b> y una <b>captura</b> del problema. Así te ayudan más rápido.</div></div>
       </div>
     </div>
   </section>
@@ -721,6 +726,7 @@ const FORMS = [
   },
   {
     id:"252506236846864", icon:"🚚", empresa:"WM-ES", empLabel:"Constructora William & Molina ES / Platino ES",
+    esNote:"En <b>Empresa</b> elige tu entidad de El Salvador: <b>Constructora William &amp; Molina ES</b> o <b>Distribuidora Platino ES</b> (el formulario es de las dos).",
     title:"Sistema de Pase de Salida",
     fullTitle:"SISTEMA DE PASE DE SALIDA EL SALVADOR",
     url:"https://form.jotform.com/252506236846864", subs:410, approval:false,
@@ -734,6 +740,7 @@ const FORMS = [
   },
   {
     id:"261185208569060", icon:"📦", empresa:"WM-ES", empLabel:"WM El Salvador / Duracreto",
+    esNote:"En <b>Empresa</b> elige <b>WM El Salvador</b> o <b>Duracreto</b> (ambas son de El Salvador).",
     title:"Requisición de Materiales (WMCG-02)",
     fullTitle:"WMCG-02 REQUISICIÓN WM EL SALVADOR REV. 00",
     url:"https://form.jotform.com/261185208569060", subs:0, approval:true, nuevo:true,
@@ -975,20 +982,51 @@ const ASSIST = [
 ];
 
 /* ====== RENDER ====== */
-const EMP_BADGE={'DP-ES':'DP-ES','WM-ES':'WM-ES','Mixto':'Mixto HN/ES','Compartido':'Compartido'};
-function badgeClass(f){return {'DP-ES':'b-dp','WM-ES':'b-wm','Mixto':'b-shared','Compartido':'b-compartido'}[f.empresa]||'b-count';}
+var FORMMETA={
+  "252524642740858":{g:"propio",e:["DP-ES"]},
+  "250494556119866":{g:"propio",e:["DP-ES"]},
+  "251334521604851":{g:"mixto",e:["DP-ES"]},
+  "253074452433857":{g:"mixto",e:["DP-ES"]},
+  "253076483841866":{g:"propio",e:["DP-ES"]},
+  "260745727921059":{g:"propio",e:["DP-ES"]},
+  "260746400366051":{g:"propio",e:["DP-ES"]},
+  "243254499348064":{g:"mixto",e:["DP-ES"]},
+  "252506236846864":{g:"propio",e:["DP-ES","WM-ES"]},
+  "261185208569060":{g:"propio",e:["WM-ES","Duracreto"]},
+  "261185248001853":{g:"propio",e:["WM-ES"]},
+  "242896631406866":{g:"compartido",e:["WM-ES","Duracreto"]},
+  "260355202358048":{g:"compartido",e:[]},
+  "242964497133869":{g:"compartido",e:["DP-ES","WM-ES","Duracreto"]},
+  "241855438808063":{g:"compartido",e:["DP-ES","WM-ES","Duracreto"]},
+  "252876363448065":{g:"compartido",e:["Duracreto"]},
+  "252935688831067":{g:"compartido",e:["DP-ES","WM-ES","Duracreto"]},
+  "252644194908061":{g:"mixto",e:["DP-ES"]},
+  "251905423873056":{g:"mixto",e:["DP-ES"]},
+  "252094618702053":{g:"mixto",e:["DP-ES"]}
+};
+var EMP_LABEL={"DP-ES":"DP-ES","WM-ES":"WM-ES","Duracreto":"Duracreto"};
+var EMP_CLASS={"DP-ES":"b-dp","WM-ES":"b-wm","Duracreto":"b-dc"};
+function metaOf(f){ return FORMMETA[f.id]||{g:"compartido",e:[]}; }
+function badgesHtml(f){
+  var m=metaOf(f), h="";
+  (m.e||[]).forEach(function(x){ h+='<span class="badge '+(EMP_CLASS[x]||"b-count")+'">'+(EMP_LABEL[x]||x)+"</span>"; });
+  if(m.g==="mixto") h+='<span class="badge b-shared">Mixto HN/ES</span>';
+  if(m.g==="compartido") h+='<span class="badge b-compartido">Compartido</span>';
+  return h;
+}
 function makeCard(f){
-  const el=document.createElement("div"); el.className="fcard"; el.id="form-"+f.id; el.dataset.emp=f.empresa;
+  var m=metaOf(f);
+  var el=document.createElement("div"); el.className="fcard"; el.id="form-"+f.id; el.dataset.grupo=m.g;
   el.innerHTML=`
     <div class="fhead"><div class="fic">${f.icon}</div><div><h3>${f.title}</h3></div></div>
     <div class="summary">${f.summary}</div>
     <div class="badges">
-      <span class="badge ${badgeClass(f)}">${EMP_BADGE[f.empresa]||f.empresa}</span>
+      ${badgesHtml(f)}
       ${f.approval?'<span class="badge b-appr">✅ Con aprobación</span>':''}
       ${f.nuevo?'<span class="badge b-count">🆕 Nuevo</span>':`<span class="badge b-count">${f.subs} envíos</span>`}
     </div>
     <div class="fbody">
-      ${f.esNote?`<div class="es-note">🇸🇻 <b>Para El Salvador:</b> ${f.esNote}</div>`:''}
+      ${f.esNote?`<div class="es-note"><b>📍 Para El Salvador:</b> ${f.esNote}</div>`:''}
       <h5>¿Para qué sirve?</h5><p>${f.purpose}</p>
       <h5>¿Quién lo usa?</h5><p>${f.audience}</p>
       <h5>¿Cuándo se usa?</h5><p>${f.when}</p>
@@ -1001,29 +1039,34 @@ function makeCard(f){
       <a class="btn btn-primary" href="${f.url}" target="_blank" rel="noopener">🔗 Abrir formulario</a>
       <button class="btn btn-ghost toggle-detail">Ver detalle ▾</button>
     </div>`;
-  const tgl=el.querySelector(".toggle-detail");
-  tgl.addEventListener("click",()=>{ el.classList.toggle("open"); tgl.textContent=el.classList.contains("open")?"Ocultar detalle ▴":"Ver detalle ▾"; });
-  const fh=el.querySelector(".fhead"); fh.style.cursor="pointer"; fh.addEventListener("click",()=>tgl.click());
+  var tgl=el.querySelector(".toggle-detail");
+  tgl.addEventListener("click",function(){ el.classList.toggle("open"); tgl.textContent=el.classList.contains("open")?"Ocultar detalle ▴":"Ver detalle ▾"; });
+  var fh=el.querySelector(".fhead"); fh.style.cursor="pointer"; fh.addEventListener("click",function(){ tgl.click(); });
   return el;
 }
-function addDivider(grid,txt){const d=document.createElement("div");d.className="group-div";d.textContent=txt;grid.appendChild(d);}
-function addNote(grid,txt){const d=document.createElement("div");d.className="group-note";d.innerHTML=txt;grid.appendChild(d);}
+function addDivider(grid,txt){var d=document.createElement("div");d.className="group-div";d.textContent=txt;grid.appendChild(d);}
+function addNote(grid,txt){var d=document.createElement("div");d.className="group-note";d.innerHTML=txt;grid.appendChild(d);}
 function renderForms(filter){
-  const grid=document.getElementById("formsGrid"); grid.innerHTML="";
-  const all=FORMS.filter(f=>!filter||filter==="todos"||f.empresa===filter);
-  if(!filter||filter==="todos"){
-    const propios=all.filter(f=>f.empresa!=="Compartido");
-    const comp=all.filter(f=>f.empresa==="Compartido");
-    addDivider(grid,"🇸🇻 Formularios propios de El Salvador");
-    propios.forEach(f=>grid.appendChild(makeCard(f)));
-    if(comp.length){
-      addDivider(grid,"🔁 Formularios compartidos (varias empresas o países)");
-      addNote(grid,"Estos los usan varias empresas del grupo. Si eres de El Salvador, elige la opción de tu empresa o planta de ES cuando el formulario lo pida.");
-      comp.forEach(f=>grid.appendChild(makeCard(f)));
-    }
-  } else {
-    all.forEach(f=>grid.appendChild(makeCard(f)));
+  var grid=document.getElementById("formsGrid"); grid.innerHTML="";
+  function match(f){ var m=metaOf(f);
+    if(!filter||filter==="todos") return true;
+    if(filter==="Mixto") return m.g==="mixto";
+    if(filter==="Compartido") return m.g==="compartido";
+    return (m.e||[]).indexOf(filter)>=0;
   }
+  var all=FORMS.filter(match);
+  if(!filter||filter==="todos"){
+    var groups=[["propio","🇸🇻 Formularios propios de El Salvador",""],
+      ["mixto","🔀 Mixtos: Honduras / El Salvador","Un mismo formulario para los dos países: elige El Salvador (o tu empresa de ES) cuando el formulario lo pida."],
+      ["compartido","🔁 Compartidos (varias empresas del grupo)","El Salvador es una de varias empresas. Elige la opción de tu empresa de ES según la nota de cada tarjeta."]];
+    groups.forEach(function(g){
+      var list=all.filter(function(f){ return metaOf(f).g===g[0]; });
+      if(!list.length) return;
+      addDivider(grid,g[1]);
+      if(g[2]) addNote(grid,g[2]);
+      list.forEach(function(f){ grid.appendChild(makeCard(f)); });
+    });
+  } else { all.forEach(function(f){ grid.appendChild(makeCard(f)); }); }
 }
 function renderFaq(){
   const list=document.getElementById("faqList"); list.innerHTML="";
